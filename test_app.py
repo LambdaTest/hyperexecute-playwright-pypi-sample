@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import sys
 import urllib
 import json
 import pytest
@@ -12,7 +13,7 @@ capabilities = {
     'browserName': 'Chrome',
     'browserVersion': 'latest',
     'LT:Options': {
-        'platform': "Windows 10",
+        'platform': os.environ.get("TARGET_OS", "Windows 10"),
         'build': 'Playwright Build',
         'name': 'Playwright Test',
         'user': os.environ.get("LT_USERNAME"),
@@ -24,7 +25,7 @@ capabilities = {
 }
 
 def test_homepage_has_Playwright_in_title_and_get_started_link_linking_to_the_intro_page(playwright):
-    playwrightVersion = str(subprocess.getoutput('playwright --version')).strip().split(" ")[1]
+    playwrightVersion = subprocess.check_output([sys.executable, '-m', 'playwright', '--version'], universal_newlines=True).strip().split(" ")[1]
     capabilities['LT:Options']['playwrightVersion'] = playwrightVersion
     lt_cdp_url = 'wss://cdp.lambdatest.com/playwright?capabilities=' + urllib.parse.quote(json.dumps(capabilities))
     browser = playwright.chromium.connect(lt_cdp_url)

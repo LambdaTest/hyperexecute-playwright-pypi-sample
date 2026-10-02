@@ -15,7 +15,8 @@ cacheDirectories:
   - CacheDir
 pre:
   - pip3 install -r requirement.txt --cache-dir CacheDir
-  - npx playwright install
+  - npm install playwright@1.48.0
+  - python3 -m playwright install
   - pip3 install pytest==7.2.1
 
 testDiscovery:
@@ -27,8 +28,5 @@ testRunnerCommand: python3 -m pytest $test
 post:
   - cat yaml/win/.hyperexecute_autosplits.yaml
 
-runtime:
-  language: python
-  version: "3.7"
 
 jobLabel: [playwright-pytest, mac, autosplit]
